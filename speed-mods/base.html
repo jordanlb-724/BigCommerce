@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="{{ locale_name }}">
-    <head>  
+    <head>
         {{!-- crossorigin="anonymous"
             This allows us to see cross origin script exceptions
             Only use it in link/script if they require it and the following header is present in the response:
@@ -11,7 +11,7 @@
         {{!-- ****** Globaly Static Resources ****** --}}
         {{!-- Possible to cache at a site wide level. Rarely change and are the same on every page and could request resources --}}
 
-        {{!-- 
+        {{!--
             Native lazy-loading with Lazysizes as a fallback
             Loads Lazysizes only if required
             Works bast with my modified responsive-img.html file
@@ -22,7 +22,7 @@
             CSS files still delay building the DOM. So on page lazy-loading images only start loading once the CSS has loaded.
         --}}
         <script>
-        !function(w,d){           
+        !function(w,d){
             var native = 'loading' in HTMLImageElement.prototype;
 
             var canGoNative = function(n) {
@@ -54,7 +54,7 @@
                 }
                 {{/if }}
                 {{!-- END: These are for backwards compatibility --}}
-                if (n.dataset.src) n.src = n.dataset.src;                                    
+                if (n.dataset.src) n.src = n.dataset.src;
                 if (n.dataset.srcset) n.srcset = n.dataset.srcset;
                 if (n.dataset.sizes && n.dataset.sizes !== 'auto') n.sizes = n.dataset.sizes;
                 n.classList.remove('lazyload');
@@ -65,7 +65,7 @@
             var o = new MutationObserver(function(l) {
                 l.forEach(function(m) {
                     m.addedNodes.forEach(function(n) {
-                        if (n.nodeType === 1 ) {                            
+                        if (n.nodeType === 1 ) {
                             if (n.classList.contains('lazyload')) {
                                 if (canGoNative(n)) {
                                     goNative(n);
@@ -78,7 +78,7 @@
                                 n.classList.add('normalloading')
                                 n.onload=function(){n.classList.add('normalloaded');n.classList.remove('normalloading')};
                             }
-                        }                         
+                        }
                     });
                 });
             });
@@ -88,9 +88,9 @@
 
         {{!-- CSS based LQIP support
             My modified responsive-img.html supports LQIP by using CSS background-image
-            This CSS is needed to make the LQIP image match the positioning of the real image 
+            This CSS is needed to make the LQIP image match the positioning of the real image
         --}}
-        <style>          
+        <style>
             img.placeholder-lqip {
                 background-repeat: no-repeat;
                 background-size: contain;
@@ -103,7 +103,7 @@
 
         {{!-- Header logo sizing
             This stops a Layout Shift. Set to the the size of your logo image
-        <style>.header-logo-image {width: 250px; height: 100px;}</style> 
+        <style>.header-logo-image {width: 250px; height: 100px;}</style>
         --}}
         {{!-- Header logo preload --}}
         {{#if settings.store_logo.image}}
@@ -127,15 +127,15 @@
         </script>
 
         {{> components/common/polyfill-script }}
- 
 
-        {{!-- 
+
+        {{!--
             NOT USING - seems to make no difference
-            Change the webfont.js code up to but not including the getFontsCollection line to be async by replacing it with this 
+            Change the webfont.js code up to but not including the getFontsCollection line to be async by replacing it with this
             Make sure you list the correct fonts so that they load early
             https://github.com/typekit/webfontloader
         --}}
-        {{!-- 
+        {{!--
         <link rel="preload" href="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" crossorigin="anonymous" as="script">
         <script>
             WebFontConfig = {
@@ -144,7 +144,7 @@
                         },
                         classes: false
                     };
-        
+
             (function(d) {
                 var wf = d.createElement('script'), s = d.scripts[0];
                 wf.crossOrigin="anonymous";
@@ -154,7 +154,7 @@
             })(document);
         </script>
         --}}
-        {{!--  
+        {{!--
             Make sure you list the correct fonts so that they load early. The same ones as getFontsCollection requests
             The fonts will then load after webfont.js is loaded instead of after the css files are loaded.
             https://github.com/typekit/webfontloader
@@ -171,7 +171,7 @@
                     classes: false
                 });
         </script>
-        {{!-- 
+        {{!--
             NOT USING - too hard to determine which urls to load.
             Preload web fonts we know are used. On fast connections fonts can be the slowest bit. Does not seem to make much difference on slower connections.
             This also stops flicker.
@@ -202,9 +202,9 @@
         {{/startsWith}}
         {{/eachIndex}}
 
-        {{!-- 
+        {{!--
             If you use Google Optimize a preload will help reduce flicker
-            Tag Rocket loads it async with importance set to high 
+            Tag Rocket loads it async with importance set to high
         --}}
         {{!--
         <link rel="preload" href="https://www.googleoptimize.com/optimize.js?id=OPT-XXXXXXX" crossorigin="anonymous" as="script">
@@ -218,21 +218,21 @@
         --}}
 
         {{!-- Pre-connecting
-            Place late in head script so are the last requests to be considered. 
-            Only add what is used and is requested later on 
+            Place late in head script so are the last requests to be considered.
+            Only add what is used and is requested later on
             These are browser hits. The browser will only apply them when it has time
             https://web.dev/preconnect-and-dns-prefetch/
         --}}
 
-        {{!-- BigCommerce Google Analytics Enhanced Ecommerce --}}  
-        {{!-- 
+        {{!-- BigCommerce Google Analytics Enhanced Ecommerce --}}
+        {{!--
         <link rel="preconnect" href="https://www.google-analytics.com">
         <link rel="dns-prefetch" href="https://www.google-analytics.com">
         --}}
 
-        {{!-- 
-            if we have certain BigCommerce widgets (Hero Banner, Carousel, Product, Product Set) they use external scripts. 
-            Note that the code for these widgets runs really late as it is dynamically loading the scripts from within the body of the page.   
+        {{!--
+            if we have certain BigCommerce widgets (Hero Banner, Carousel, Product, Product Set) they use external scripts.
+            Note that the code for these widgets runs really late as it is dynamically loading the scripts from within the body of the page.
             Which means the content of the widgets takes some time to show.
             A preload on pages you know use one of these widgets would be better, but the URLs may unfortunately change on you!
             Having the widget add its own preload would work better.
@@ -243,127 +243,127 @@
         --}}
 
         {{!-- BigCommerce Recaptcha --}}
-        {{!--       
+        {{!--
         <link rel="preconnect" href="https://www.google.com">
-        <link rel="dns-prefetch" href="https://www.google.com"> 
+        <link rel="dns-prefetch" href="https://www.google.com">
 
         <link rel="preconnect" href="https://www.gstatic.com">
         <link rel="dns-prefetch" href="https://www.gstatic.com">
         --}}
 
         {{!-- Google gtag --}}
-        {{!--            
+        {{!--
         <link rel="preconnect" href="https://www.googletagmanager.com">
         <link rel="dns-prefetch" href="https://www.googletagmanager.com">
         --}}
 
         {{!-- Google Ads --}}
-        {{!--               
+        {{!--
         <link rel="preconnect" href="https://www.googleadservices.com">
         <link rel="dns-prefetch" href="https://www.googleadservices.com">
-        
+
         <link rel="preconnect" href="https://googleads.g.doubleclick.net">
         <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net">
-        
+
         <link rel="preconnect" href="https://pagead2.googlesyndication.com">
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
         --}}
 
         {{!-- Facebook Ads --}}
-        {{!--         
+        {{!--
         <link rel="preconnect" href="https://connect.facebook.net">
         <link rel="dns-prefetch" href="https://connect.facebook.net">
-        
+
         <link rel="preconnect" href="https://www.facebook.com">
         <link rel="dns-prefetch" href="https://www.facebook.com">
         --}}
 
         {{!-- Pinterest Ads --}}
-        {{!--               
+        {{!--
         <link rel="preconnect" href="https://s.pinimg.com">
         <link rel="dns-prefetch" href="https://s.pinimg.com">
-        
+
         <link rel="preconnect" href="https://ct.pinterest.com">
         <link rel="dns-prefetch" href="https://ct.pinterest.com">
-        
+
         <link rel="preconnect" href="https://www.pinterest.com">
         <link rel="dns-prefetch" href="https://www.pinterest.com">
         --}}
 
         {{!-- Bing Ads --}}
-        {{!--              
+        {{!--
         <link rel="preconnect" href="https://bat.bing.com">
         <link rel="dns-prefetch" href="https://bat.bing.com">
         --}}
 
         {{!-- Tag Rocket Web Vitals --}}
-        {{!--          
+        {{!--
         <link rel="preconnect" href="https://unpkg.com">
         <link rel="dns-prefetch" href="https://unpkg.com">
         --}}
 
         {{!-- Shogun --}}
-        {{!--            
+        {{!--
         <link rel="preconnect" href="https://analytics.getshogun.com">
         <link rel="dns-prefetch" href="https://analytics.getshogun.com">
         --}}
 
         {{!-- Just Uno --}}
-        {{!--        
+        {{!--
         <link rel="preconnect" href="https://cdn.jst.ai">
         <link rel="dns-prefetch" href="https://cdn.jst.ai">
-        
+
         <link rel="preconnect" href="https://my.jst.ai">
         <link rel="dns-prefetch" href="https://my.jst.ai">
-        
+
         <link rel="preconnect" href="https://aly.jst.ai">
         <link rel="dns-prefetch" href="https://aly.jst.ai">
         --}}
 
         {{!-- Twitter Ads --}}
-        {{!--            
+        {{!--
         <link rel="preconnect" href="https://static.ads-twitter.com">
         <link rel="dns-prefetch" href="https://static.ads-twitter.com">
-        
+
         <link rel="preconnect" href="https://analytics.twitter.com">
         <link rel="dns-prefetch" href="https://analytics.twitter.com">
-        
+
         <link rel="preconnect" href="https://t.co">
         <link rel="dns-prefetch" href="https://t.co">
         --}}
 
         {{!-- Yahoo Ads --}}
-        {{!--          
+        {{!--
         <link rel="preconnect" href="https://s.yimg.com">
         <link rel="dns-prefetch" href="https://s.yimg.com">
-        
+
         <link rel="preconnect" href="https://sp.analytics.yahoo.com">
         <link rel="dns-prefetch" href="https://sp.analytics.yahoo.com">
         --}}
 
         {{!-- Taboola --}}
-        {{!--       
+        {{!--
         <link rel="preconnect" href="https://cdn.taboola.com">
         <link rel="dns-prefetch" href="https://cdn.taboola.com">
         --}}
 
         {{!-- TikTok --}}
-        {{!--          
+        {{!--
         <link rel="preconnect" href="https://analytics.tiktok.com">
         <link rel="dns-prefetch" href="https://analytics.tiktok.com">
         --}}
 
         {{!-- Criteo --}}
-        {{!--           
+        {{!--
         <link rel="preconnect" href="https://dynamic.criteo.com">
         <link rel="dns-prefetch" href="https://dynamic.criteo.com">
-        
+
         <link rel="preconnect" href="https://static.criteo.net">
         <link rel="dns-prefetch" href="https://static.criteo.net">
-        
+
         <link rel="preconnect" href="https://sslwidget.criteo.com">
         <link rel="dns-prefetch" href="https://sslwidget.criteo.com">
-        
+
         <link rel="preconnect" href="https://gum.criteo.com">
         <link rel="dns-prefetch" href="https://gum.criteo.com">
         --}}
